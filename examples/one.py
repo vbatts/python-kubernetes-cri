@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import grpc
-import api_pb2_grpc
+import kubernetes.cri.api_pb2_grpc as api_pb2_grpc
 
 print(api_pb2_grpc)

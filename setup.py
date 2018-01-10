@@ -3,20 +3,26 @@
 from distutils.core import setup
 
 setup(name='kubernetes-cri',
-      version='0.1',
+      version='0.1.1',
       description='python bindings for the Kubernetes Container Runtime Interface (CRI) gRPC',
+      long_description='''
+These bindings use the api.proto from kubernetes, as well as the compiled
+protobuf package for gogoproto (`github.com.gogo.protobuf.gogoproto`).
+      ''',
       author='Vincent Batts',
       author_email='vbatts@hashbangbash.com',
       url='https://github.com/vbatts/python-kubernetes-cri',
       license='MIT',
-      py_modules=[
-          'api_pb2_grpc',
-          'api_pb2',
+      packages=[
+          'kubernetes.cri',
           'github',
           'github.com',
           'github.com.gogo',
           'github.com.gogo.protobuf',
           'github.com.gogo.protobuf.gogoproto',
-          'github.com.gogo.protobuf.gogoproto.gogo_pb2',
           ],
+      package_dir={
+          'kubernetes.cri': 'src/kubernetes/cri',
+          'github': 'src/github/',
+          },
         )
