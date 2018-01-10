@@ -3,7 +3,7 @@ PYTHON ?= $(shell command -v python)
 
 .PHONY: clean
 clean:
-	rm -rf *~
+	rm -rf *~ build/
 
 
 # this may need to have a map of versions of protos to download ... 
