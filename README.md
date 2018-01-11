@@ -2,16 +2,34 @@
 
 Python bindings for the kubernetes CRI (container runtime interface) gRPC
 
+__Note:__ This is an early trial and is subject to change
+
 ## Install
 
 Ideally...
 
-```bash
+```shell
 pip install kubernetes-cri
 ```
 
-## rebuilind from .proto
+## rebuilding from .proto
 
 Requires `pip install grpcio-tools`.
 
+```shell
+make rebuild
+```
+
+## api.proto
+
+The version of api.proto used intially is from [kubernetes v1.7.12](https://github.com/kubernetes/kubernetes/blob/v1.7.12/pkg/kubelet/apis/cri/v1alpha1/runtime/api.proto).
+
+TODO: automate fetching multiple versions, and have them in independent python package paths
+
+## gogoprotobuf
+
+The vendored protobuf from https://github.com/gogo/protobuf/gogoproto
+is commit c0656edd0d9eab7c66d1eb0c568f9039345796f7
+
+TODO: use a tool to automate this vendoring
 
