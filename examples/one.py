@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
 import grpc
+import kubernetes.cri.api_pb2 as pb
 import kubernetes.cri.api_pb2_grpc as api
 
-print(api)
-
-channel = grpc.insecure_channel('/var/run/crio/crio.sock')
+sock = 'unix:/var/run/crio/crio.sock'
+channel = grpc.insecure_channel(sock)
 image_stub = api.ImageServiceStub(channel)
 runtime_stub = api.RuntimeServiceStub(channel)
 
-print(image_stub)
-print(runtime_stub)
+vers = runtime_stub.Version(pb.VersionRequest())
+print(vers)
