@@ -46,7 +46,11 @@ sandbox_config = pb.PodSandboxConfig(
 					name = 'python-test-{}'.format(randint(0,1000)),
 					namespace = 'test',
 					),
-				hostname = 'python-test')
+				hostname = 'python-test',
+                linux = pb.LinuxPodSandboxConfig(
+                    security_context = pb.LinuxSandboxSecurityContext(),
+                    ),
+                )
 # we'll try some error handling
 try:
 	runpodsandbox_response = runtime_stub.RunPodSandbox(
@@ -64,7 +68,13 @@ create_container_response = runtime_stub.CreateContainer(
 			pod_sandbox_id = runpodsandbox_response.pod_sandbox_id,
 			sandbox_config = sandbox_config,
 			config = pb.ContainerConfig(
-                 metadata = pb.ContainerMetadata(name = sandbox_config.metadata.name),
+                metadata = pb.ContainerMetadata(name = sandbox_config.metadata.name),
 				image = bb_image_spec,
 				command = ['/bin/uptime'],
+                linux = pb.LinuxContainerConfig(
+                    resources = pb.LinuxContainerResources(),
+                    security_context = pb.LinuxContainerSecurityContext(
+                        privileged = False,
+                        ),
+                    ),
 				)))
