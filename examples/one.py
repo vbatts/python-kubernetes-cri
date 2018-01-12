@@ -58,12 +58,13 @@ except grpc._channel._Rendezvous as e:
 
 print('sandbox id: {}'.format(runpodsandbox_response.pod_sandbox_id))
 
-## this currently fails
+# and create a container in this sandbox
 create_container_response = runtime_stub.CreateContainer(
 		pb.CreateContainerRequest(
 			pod_sandbox_id = runpodsandbox_response.pod_sandbox_id,
 			sandbox_config = sandbox_config,
 			config = pb.ContainerConfig(
+                 metadata = pb.ContainerMetadata(name = sandbox_config.metadata.name),
 				image = bb_image_spec,
 				command = ['/bin/uptime'],
 				)))
