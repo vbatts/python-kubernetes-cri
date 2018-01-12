@@ -16,6 +16,8 @@ pip install kubernetes-cri
 
 The pydoc of these generated files is terrible, and really requires getting familiar with the transaction between server and client, and then sitting with the api.proto open for review of field names, funcations and returns.
 
+See [the gRPC python tutorial](https://grpc.io/docs/tutorials/basic/python.html) to get a bit more familiar on the approach.
+
 See the [examples/](./examples/) for client usages.
 
 ## rebuilding from .proto
