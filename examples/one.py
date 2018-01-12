@@ -6,6 +6,7 @@ import kubernetes.cri.api_pb2_grpc as api
 
 from random import randint
 from os import getenv
+from time import sleep
 
 sock = getenv('RUNTIME_SOCK') or 'unix:/var/run/crio/crio.sock'
 channel = grpc.insecure_channel(sock)
@@ -47,11 +48,11 @@ sandbox_config = pb.PodSandboxConfig(
 					namespace = 'test',
 					),
 				hostname = 'python-test',
-                linux = pb.LinuxPodSandboxConfig(
-                    security_context = pb.LinuxSandboxSecurityContext(),
-                    ),
-                )
-# we'll try some error handling
+				linux = pb.LinuxPodSandboxConfig(
+					security_context = pb.LinuxSandboxSecurityContext(),
+					),
+				)
+# example of error handling
 try:
 	runpodsandbox_response = runtime_stub.RunPodSandbox(
 			pb.RunPodSandboxRequest(
@@ -68,13 +69,30 @@ create_container_response = runtime_stub.CreateContainer(
 			pod_sandbox_id = runpodsandbox_response.pod_sandbox_id,
 			sandbox_config = sandbox_config,
 			config = pb.ContainerConfig(
-                metadata = pb.ContainerMetadata(name = sandbox_config.metadata.name),
+				metadata = pb.ContainerMetadata(name = sandbox_config.metadata.name),
 				image = bb_image_spec,
 				command = ['/bin/uptime'],
-                linux = pb.LinuxContainerConfig(
-                    resources = pb.LinuxContainerResources(),
-                    security_context = pb.LinuxContainerSecurityContext(
-                        privileged = False,
-                        ),
-                    ),
+				linux = pb.LinuxContainerConfig(
+					resources = pb.LinuxContainerResources(),
+					security_context = pb.LinuxContainerSecurityContext(
+						privileged = False,
+						),
+					),
 				)))
+
+# and cleanup our example, in an async manner
+remove_pod_sandbox_future = runtime_stub.RemovePodSandbox.future(
+		pb.RemovePodSandboxRequest(
+			pod_sandbox_id = runpodsandbox_response.pod_sandbox_id,
+			),
+		)
+
+print("taking a brief pause...")
+sleep(1)
+
+try:
+	remove_pod_sandbox_response = remove_pod_sandbox_future.result()
+	print(remove_pod_sandbox_response)
+except grpc._channel._Rendezvous as e:
+	print("failed to remove pod sandbox: {}".format(e))
+	exit(1)
