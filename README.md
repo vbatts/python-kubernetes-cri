@@ -6,8 +6,6 @@ __Note:__ This is an early trial and is subject to change
 
 ## Install
 
-Ideally...
-
 ```shell
 pip install kubernetes-cri
 ```
